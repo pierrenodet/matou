@@ -23,6 +23,8 @@ ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
 lazy val root = tlCrossRootProject.aggregate(core)
 
+ThisBuild / tlCiReleaseBranches := Seq.empty
+
 ThisBuild / githubWorkflowAddedJobs +=
   WorkflowJob(
     "coverage",
