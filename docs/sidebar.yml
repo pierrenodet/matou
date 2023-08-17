@@ -1,0 +1,8 @@
+index: index.md
+subsection:
+  - title: Quick Start
+    page: quickstart.md
+  - title: Cheat Sheet
+    page: cheatsheet.md
+  - title: Acknowledgements
+    page: acknowledgements.md
