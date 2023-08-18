@@ -2,6 +2,8 @@ index: index.md
 subsection:
   - title: Quick Start
     page: quickstart.md
+  - title: Examples
+    page: examples.md
   - title: Cheat Sheet
     page: cheatsheet.md
   - title: Acknowledgements

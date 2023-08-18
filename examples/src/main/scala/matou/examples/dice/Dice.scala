@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Example
+ * Copyright 2023 Pierre Nodet
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@ package matou.examples.dice
 import matou.CategoryOps.*
 import matou.Enumerable.*
 import matou.Vector
+import matou.MathOps.*
 
 type Die[N <: Int] = BoundedNatural[1, N]
 
 @main
-def sumOf2D6 =
+def sumOf2d6 =
 
   val d6 = Vector.fill[6, Double](1.0 / 6)
 
-  val twoD6 = lift((d1: Die[6], d2: Die[6]) => d1 + d2) >>> (d6 &&& d6)
+  val `2d6` = lift((d1: Die[6], d2: Die[6]) => d1 + d2) >>> (d6 &&& d6)
 
-  println(twoD6.show)
+  println(`2d6`.show)
+  println((d6.pad[0, 3, 0, 3](0) ⋆ d6).show)

@@ -1,6 +1,6 @@
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-ThisBuild / tlBaseVersion := "0.0" // your current series x.y
+ThisBuild / tlBaseVersion := "0.0"
 
 ThisBuild / organization     := "io.github.pierrenodet"
 ThisBuild / organizationName := "Pierre Nodet"
@@ -8,7 +8,6 @@ ThisBuild / startYear        := Some(2023)
 ThisBuild / licenses         := Seq(License.Apache2)
 ThisBuild / developers       := List(tlGitHubDev("pierrenodet", "Pierre Nodet"))
 
-// publish to s01.oss.sonatype.org (set to true to publish to oss.sonatype.org instead)
 ThisBuild / tlSonatypeUseLegacyHost := false
 
 val Scala3 = "3.3.0"
@@ -21,7 +20,8 @@ val GraalVM     = JavaSpec.graalvm("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(PrimaryJava, LTSJava, GraalVM)
 
-lazy val root = tlCrossRootProject.aggregate(core)
+lazy val root = tlCrossRootProject
+  .aggregate(core, benchmarks, examples)
 
 ThisBuild / tlCiReleaseBranches := Seq.empty
 
