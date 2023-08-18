@@ -224,5 +224,6 @@ pages = [{"l":"index.html#","e":false,"i":"","n":"matou","t":"matou","d":"","k":
 {"l":"matou/Vector$.html#zeros-76a","e":false,"i":"","n":"zeros","t":"zeros[N <: Dimension, A : Numeric]: Matrix[1, N, A] { type transposed = false;  }","d":"matou.Vector","k":"def","x":""},
 {"l":"docs/index.html#","e":false,"i":"","n":"matou","t":"matou","d":"","k":"static","x":""},
 {"l":"docs/quickstart.html#","e":false,"i":"","n":"Quick Start","t":"Quick Start","d":"","k":"static","x":""},
+{"l":"docs/examples.html#","e":false,"i":"","n":"Examples","t":"Examples","d":"","k":"static","x":""},
 {"l":"docs/cheatsheet.html#","e":false,"i":"","n":"Cheat Sheet","t":"Cheat Sheet","d":"","k":"static","x":""},
 {"l":"docs/acknowledgements.html#","e":false,"i":"","n":"Acknowledgements","t":"Acknowledgements","d":"","k":"static","x":""}];
