@@ -64,7 +64,7 @@ ThisBuild / githubWorkflowAddedJobs +=
               .relativize((core.jvm / Compile / doc / target).value.toPath)
             (0 until path.getNameCount).map(path.getName).mkString("/")
           },
-          "keep_files"   -> "true"
+          "keep_files"   -> "false"
         ),
         name = Some("Publish site"),
         cond = Some(

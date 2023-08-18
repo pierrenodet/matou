@@ -18,7 +18,9 @@ object docs{
         s"Copyright (c) 2023, ${organizationName.value}",
         "-source-links:github://pierrenodet/matou",
         "-revision",
-        "main"
+        "main",
+        "-Yapi-subdirectory",
+        "api",
       ),
     Compile / doc / scalacOptions ++= Seq("-snippet-compiler:compile"),
   )
