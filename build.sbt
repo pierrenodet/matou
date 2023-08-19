@@ -88,10 +88,6 @@ lazy val core = crossProject(JVMPlatform, JSPlatform, NativePlatform)
   )
   .settings(docs.settings)
 
-ThisBuild / javaOptions ++= Seq(
-  "-Ddev.ludovic.netlib.blas.nativeLibPath=/usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0"
-)
-
 lazy val benchmarks: Project = project
   .in(file("benchmarks"))
   .settings(
