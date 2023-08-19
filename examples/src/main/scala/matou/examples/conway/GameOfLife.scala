@@ -105,4 +105,4 @@ end GameOfLife
 
 @main
 def app(): Unit =
-  PApplet.main("matou.conway.GameOfLife")
+  PApplet.main("matou.examples.conway.GameOfLife")

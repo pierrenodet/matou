@@ -23,10 +23,11 @@ object Scalar:
 trait Broadcast[F[_], G[_]]:
 
   type H[_]
+
   transparent inline def broadcast[A, B, C](
       inline a: F[A],
       inline b: G[B],
-      inline out: Option[H[C]] = None.asInstanceOf[Option[H[C]]]
+      inline out: Option[H[C]] = None
   )(inline f: (A, B) => C): H[C]
 
   transparent inline def broadcastInPlace[A, B, C](
@@ -34,29 +35,9 @@ trait Broadcast[F[_], G[_]]:
       inline b: G[B]
   )(
       inline f: (A, B) => C
-  )(using ev: F[A] <:< H[C]) = broadcast(a, b, Some(ev.apply(a)))(f)
+  )(using ev: F[A] =:= H[C]) = broadcast(a, b, Some(ev(a)))(f)
 
-object Broadcast:
-  type Aux[F[_], G[_], H0[_]] = Broadcast[F, G] { type H[C] = H0[C] }
-
-  inline given matrixSameSizeCanBroadcast[
-      M <: Dimension,
-      N <: Dimension
-  ]: Broadcast[[A] =>> Matrix[M, N, A], [B] =>> Matrix[M, N, B]] with
-    type H[C] = Matrix[M, N, C]
-    transparent inline def broadcast[A, B, C](
-        inline a: Matrix[M, N, A],
-        inline b: Matrix[M, N, B],
-        inline out: Option[H[C]]
-    )(inline f: (A, B) => C) = a.hadamard(b, out)(f)
-
-  inline given scalarsCanBroadcast: Broadcast[Scalar, Scalar] with
-    type H[C] = Scalar[C]
-    transparent inline def broadcast[A, B, C](
-        inline a: Scalar[A],
-        inline b: Scalar[B],
-        inline out: Option[H[C]]
-    )(inline f: (A, B) => C) = f(a, b)
+class BroadcastExpand:
 
   inline given expandColVectorRight[
       M <: Dimension,
@@ -195,27 +176,28 @@ object Broadcast:
         inline out: Option[H[C]]
     )(inline f: (A, B) => C) = a.scalar(out)(a => f(a, b))
 
-  inline given expandScalarLeftWithVec[
-      N <: Dimension
-  ]: Broadcast[[A] =>> Scalar[A], [B] =>> Vector[N, B]] with
-    type H[C] = Vector[N, C]
+object Broadcast extends BroadcastExpand:
 
+  type Aux[F[_], G[_], H0[_]] = Broadcast[F, G] { type H[C] = H0[C] }
+
+  inline given matrixSameSizeCanBroadcast[
+      M <: Dimension,
+      N <: Dimension
+  ]: Broadcast[[A] =>> Matrix[M, N, A], [B] =>> Matrix[M, N, B]] with
+    type H[C] = Matrix[M, N, C]
+    transparent inline def broadcast[A, B, C](
+        inline a: Matrix[M, N, A],
+        inline b: Matrix[M, N, B],
+        inline out: Option[H[C]]
+    )(inline f: (A, B) => C) = a.hadamard(b, out)(f)
+
+  inline given scalarsCanBroadcast: Broadcast[Scalar, Scalar] with
+    type H[C] = Scalar[C]
     transparent inline def broadcast[A, B, C](
         inline a: Scalar[A],
-        inline b: Vector[N, B],
-        inline out: Option[H[C]]
-    )(inline f: (A, B) => C) = b.scalar(out)(b => f(a, b))
-
-  inline given expandScalarRightWithVec[
-      N <: Dimension
-  ]: Broadcast[[A] =>> Vector[N, A], [B] =>> Scalar[B]] with
-    type H[C] = Vector[N, C]
-
-    transparent inline def broadcast[A, B, C](
-        inline a: Vector[N, A],
         inline b: Scalar[B],
         inline out: Option[H[C]]
-    )(inline f: (A, B) => C) = a.scalar(out)(a => f(a, b))
+    )(inline f: (A, B) => C) = f(a, b)
 
 end Broadcast
 
@@ -242,21 +224,21 @@ object BroadcastOps:
 
     transparent inline def :+=[G[_], H[_]](
         inline b: G[A]
-    )(using Broadcast.Aux[F, G, H], F[A] <:< H[A]) =
+    )(using Broadcast.Aux[F, G, H], F[A] =:= H[A]) =
       summon[Broadcast[F, G]].broadcastInPlace(a, b)(
         summon[Numeric[A]].plus(_, _)
       )
 
     transparent inline def :-=[G[_], H[_]](
         inline b: G[A]
-    )(using Broadcast.Aux[F, G, H], F[A] <:< H[A]) =
+    )(using Broadcast.Aux[F, G, H], F[A] =:= H[A]) =
       summon[Broadcast[F, G]].broadcastInPlace(a, b)(
         summon[Numeric[A]].minus(_, _)
       )
 
     transparent inline def :*=[G[_], H[_]](
         inline b: G[A]
-    )(using Broadcast.Aux[F, G, H], F[A] <:< H[A]) =
+    )(using Broadcast.Aux[F, G, H], F[A] =:= H[A]) =
       summon[Broadcast[F, G]].broadcastInPlace(a, b)(
         summon[Numeric[A]].times(_, _)
       )
@@ -270,7 +252,7 @@ object BroadcastOps:
       )
     transparent inline def :/=[G[_], H[_]](
         inline b: G[A]
-    )(using Broadcast.Aux[F, G, H], F[A] <:< H[A]) =
+    )(using Broadcast.Aux[F, G, H], F[A] =:= H[A]) =
       summon[Broadcast[F, G]].broadcastInPlace(a, b)(
         summon[Fractional[A]].div(_, _)
       )

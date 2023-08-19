@@ -31,4 +31,18 @@ class BroadcastSuite extends munit.ScalaCheckSuite:
     }
   }
 
+  property("inplace broadcast") {
+    forAll {
+      (
+          a: Matrix[1, 1, Double] { type transposed = false },
+          b: Matrix[3, 3, Double] { type transposed = false }
+      ) =>
+        val b2 = b.copy
+        b :+= a
+        b2.mapInPlace(_ + a.value)
+
+        (b :== b2).forall(identity)
+    }
+  }
+
 end BroadcastSuite

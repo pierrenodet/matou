@@ -16,7 +16,7 @@
 
 package matou
 
-type Vector[N <: Int, A] = Matrix[1, N, A] { type transposed = false }
+type Vector[N <: Dimension, A] = Matrix[1, N, A] { type transposed = false }
 
 object Vector:
   inline def unsafe[N <: Dimension, A](

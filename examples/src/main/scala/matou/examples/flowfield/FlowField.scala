@@ -108,4 +108,4 @@ class FlowField extends PApplet:
 end FlowField
 
 @main def app(): Unit =
-  PApplet.main("matou.flowfield.FlowField")
+  PApplet.main("matou.examples.flowfield.FlowField")
